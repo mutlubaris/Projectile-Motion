@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BallMotion : MonoBehaviour
@@ -41,6 +42,8 @@ public class BallMotion : MonoBehaviour
     
     void Update() 
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return; //Return if the cursor is over the Options panel
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 

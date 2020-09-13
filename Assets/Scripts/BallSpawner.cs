@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BallSpawner : MonoBehaviour
@@ -22,6 +23,8 @@ public class BallSpawner : MonoBehaviour
     {
         _ballCounter.text = (_ballsInPool - (gameObject.transform.childCount - 1)).ToString(); //Update ball counter on UI
         //The number of balls will increase whenever a ball is destroyed, because the childcount will decrease
+
+        if (EventSystem.current.IsPointerOverGameObject()) return; //Return if the cursor is over the Options panel
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;

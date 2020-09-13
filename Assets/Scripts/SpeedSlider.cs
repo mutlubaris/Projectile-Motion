@@ -16,7 +16,7 @@ public class SpeedSlider : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("h") && _speedSlider.value < 20) _speedSlider.value++;
+        if (Input.GetKeyDown("h") && _speedSlider.value < 19) _speedSlider.value++;
 
         if (Input.GetKeyDown("g") && _speedSlider.value > 1) _speedSlider.value--;
     }
