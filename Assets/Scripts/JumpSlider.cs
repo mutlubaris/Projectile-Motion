@@ -7,6 +7,8 @@ public class JumpSlider : MonoBehaviour
 {
     Slider _jumpSlider;
 
+    public float jumpValue { get { return _jumpSlider.value; } }
+
     private void Start() 
     {
         _jumpSlider = GetComponent<Slider>();
@@ -14,8 +16,8 @@ public class JumpSlider : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown("r") && _jumpSlider.value < 20) _jumpSlider.value ++;
+        if (Input.GetKeyDown("y") && _jumpSlider.value < 20) _jumpSlider.value ++;
 
-        if (Input.GetKeyDown("f") && _jumpSlider.value > 1) _jumpSlider.value--;
+        if (Input.GetKeyDown("t") && _jumpSlider.value > 1) _jumpSlider.value--;
     }
 }

@@ -5,36 +5,38 @@ using UnityEngine.UI;
 
 public class BallMotion : MonoBehaviour
 {
-    [SerializeField] GameObject _target;
-    [SerializeField] Slider _jumpSlider;
-    [SerializeField] Slider _speedSlider;
-
     [SerializeField] [Range(10, 50)] int _lineSegment = 10;
-
-    [SerializeField] [Range(1, 20)] float _jumpMultiplier = 2;
-    [SerializeField] [Range(1, 20)] float _speedMultiplier = 10;
-    [SerializeField] [Range(1, 9)] float _bounciness = 5;
+    
     [SerializeField] float _minimumJump = 0.1f;
 
     LineRenderer _lineRenderer;
     LayerMask _clickMask;
+    JumpSlider _jumpSlider;
+    SpeedSlider _speedSlider;
+    BounceSlider _bounceSlider;
 
     Vector3 _startPosition;
     Vector3 _targetPosition;
     Vector3 _cursorPosition;
     Vector3[] _checkpoints;
-    int _checkpointIndex = 1;
 
-    bool _ballSpawned;
+    int _checkpointIndex = 1;
+    float _jumpMultiplier;
+    float _speedMultiplier;
+    float _bounceMultiplier;
+
     bool _movementStarted;
 
     void Start()
     {
         _clickMask = LayerMask.GetMask("Ground");
         _lineRenderer = GetComponent<LineRenderer>();
-        _lineRenderer.enabled = false;
-        _target.SetActive(false);
-        transform.GetChild(0).gameObject.SetActive(false);
+
+        _jumpSlider = FindObjectOfType<JumpSlider>();
+        _speedSlider = FindObjectOfType<SpeedSlider>();
+        _bounceSlider = FindObjectOfType<BounceSlider>();
+
+        _startPosition = transform.position;
     }
     
     void Update() 
@@ -48,36 +50,18 @@ public class BallMotion : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (_ballSpawned)
-                {
-                    _checkpoints = new Vector3[_lineRenderer.positionCount];
-                    _lineRenderer.GetPositions(_checkpoints);
-                    _lineRenderer.enabled = false;
-                    _movementStarted = true;
-                }
-
-                else
-                {
-                     transform.position = _cursorPosition;
-                    _startPosition = transform.position;
-
-                    transform.GetChild(0).gameObject.SetActive(true);
-                    _lineRenderer.enabled = true;
-                    _target.SetActive(true);
-                    _ballSpawned = true;
-                }
+                _checkpoints = new Vector3[_lineRenderer.positionCount];
+                _lineRenderer.GetPositions(_checkpoints);
+                _lineRenderer.enabled = false;
+                _movementStarted = true;
             }
 
-            if (_ballSpawned)
-            {
-                _jumpMultiplier = (int)_jumpSlider.value;
-                _speedMultiplier = (int)_speedSlider.value;
+            _jumpMultiplier = _jumpSlider.jumpValue;
+            _speedMultiplier = _speedSlider.speedValue;
+            _bounceMultiplier = _bounceSlider.bounceValue; 
 
-                Vector3 vo = CalculateVelocity(_cursorPosition, _startPosition, 1f);
-                Visualize(vo);
-
-                _target.transform.position = hit.point + Vector3.up * 0.01f;
-            }
+            Vector3 vo = CalculateVelocity(_cursorPosition, _startPosition, 1f);
+            Visualize(vo);
         }
 
         if (_movementStarted) MoveBall();
@@ -141,11 +125,12 @@ public class BallMotion : MonoBehaviour
             for (int i = 0; i < _lineSegment + 1; i++)
             {
                 _checkpoints[i] = _checkpoints[i] + (_cursorPosition - _startPosition);
-                _checkpoints[i].y *= _bounciness / 10;
+                _checkpoints[i].y *= _bounceMultiplier / 10;
             }
-            _jumpMultiplier *= _bounciness / 10;
+            _jumpMultiplier *= _bounceMultiplier / 10;
 
             if (_jumpMultiplier > _minimumJump) _checkpointIndex = 1;
+            else Destroy(gameObject);
         }
     }
 }

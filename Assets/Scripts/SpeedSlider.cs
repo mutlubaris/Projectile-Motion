@@ -7,6 +7,8 @@ public class SpeedSlider : MonoBehaviour
 {
     Slider _speedSlider;
 
+    public float speedValue { get { return _speedSlider.value; } }
+
     private void Start()
     {
         _speedSlider = GetComponent<Slider>();
@@ -14,7 +16,7 @@ public class SpeedSlider : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("t") && _speedSlider.value < 20) _speedSlider.value++;
+        if (Input.GetKeyDown("h") && _speedSlider.value < 20) _speedSlider.value++;
 
         if (Input.GetKeyDown("g") && _speedSlider.value > 1) _speedSlider.value--;
     }
