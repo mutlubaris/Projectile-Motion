@@ -47,6 +47,7 @@ MonoBehaviour:
   _ball: {fileID: 3407221538186892866, guid: d1deddedbce9ff040859d57df10e9186, type: 3}
   _target: {fileID: 764906947407507457}
   _ballCounter: {fileID: 0}
+  _ballsInPool: 24
 --- !u!1001 &3098747295880296486
 PrefabInstance:
   m_ObjectHideFlags: 0

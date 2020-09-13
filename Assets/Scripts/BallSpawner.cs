@@ -8,6 +8,7 @@ public class BallSpawner : MonoBehaviour
     [SerializeField] GameObject _ball;
     [SerializeField] GameObject _target;
     [SerializeField] Text _ballCounter;
+    [SerializeField] int _ballsInPool = 24;
 
     LayerMask _clickMask;
     bool _readyForLaunch;
@@ -19,7 +20,7 @@ public class BallSpawner : MonoBehaviour
 
     private void Update() 
     {
-        _ballCounter.text = (25 - gameObject.transform.childCount).ToString(); //Update ball counter on UI
+        _ballCounter.text = (_ballsInPool - (gameObject.transform.childCount - 1)).ToString(); //Update ball counter on UI
         //The number of balls will increase whenever a ball is destroyed, because the childcount will decrease
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -28,7 +29,7 @@ public class BallSpawner : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 1000f, _clickMask)) //If the cursor is on the Plane
         {
             _target.transform.position = hit.point + Vector3.up * 0.01f; //Update the cursor highlighter's position
-            if (Input.GetMouseButtonDown(0) && gameObject.transform.childCount < 24) //If we click and still have balls in the pool
+            if (Input.GetMouseButtonDown(0) && gameObject.transform.childCount - 1 < _ballsInPool) //If we click and still have balls in the pool
             {
                 if(!_readyForLaunch) //Instantiate a ball if there isn't one ready to go
                 
