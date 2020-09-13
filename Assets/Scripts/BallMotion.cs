@@ -118,16 +118,23 @@ public class BallMotion : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, _checkpoints[_checkpointIndex], _speedMultiplier * Time.deltaTime * 5);
 
-            if (transform.position == _checkpoints[_checkpointIndex]) _checkpointIndex++;
+            if (transform.position == _checkpoints[_checkpointIndex]) 
+            {
+                _checkpointIndex++;
+            }
         }
         else
         {
-            for (int i = 0; i < _lineSegment + 1; i++)
+            for (int i = 0; i < _checkpoints.Length; i++)
             {
-                _checkpoints[i] = _checkpoints[i] + (_cursorPosition - _startPosition);
-                _checkpoints[i].y *= _bounceMultiplier / 10;
+                _checkpoints[i] += (_cursorPosition - _startPosition);
+                _checkpoints[i] -= ((_checkpoints[i] - transform.position) * (1 - (_bounceMultiplier / 10)));
             }
-            _jumpMultiplier *= _bounceMultiplier / 10;
+            _cursorPosition = _checkpoints[(_checkpoints.Length - 1)];
+            _startPosition = transform.position;
+
+
+            _jumpMultiplier *= (_bounceMultiplier / 10);
 
             if (_jumpMultiplier > _minimumJump) _checkpointIndex = 1;
             else Destroy(gameObject);

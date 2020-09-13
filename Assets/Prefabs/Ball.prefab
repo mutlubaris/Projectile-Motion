@@ -45,12 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62051f5a44f26642b96d0c67997a6e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _target: {fileID: 0}
-  _speedSlider: {fileID: 0}
   _lineSegment: 20
-  _speedMultiplier: 50
-  _bounciness: 5
-  _minimumJump: 0.1
+  _minimumJump: 0.05
 --- !u!120 &3407221538186892869
 LineRenderer:
   m_ObjectHideFlags: 0

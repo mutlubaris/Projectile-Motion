@@ -19,7 +19,7 @@ public class BallSpawner : MonoBehaviour
 
     private void Update() 
     {
-        _ballCounter.text = (25 - gameObject.transform.childCount).ToString();
+        _ballCounter.text = (25 - gameObject.transform.childCount).ToString(); //Update ball count on UI
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
