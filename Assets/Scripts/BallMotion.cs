@@ -42,13 +42,11 @@ public class BallMotion : MonoBehaviour
     
     void Update() 
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return; //Return if the cursor is over the Options panel
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         //If the ball is ready to launch and the cursor is on the Plane, we can try to calculate the path
-        if (Physics.Raycast(ray, out hit, 1000f, _clickMask) && !_movementStarted)
+        if (Physics.Raycast(ray, out hit, 1000f, _clickMask) && !_movementStarted && !EventSystem.current.IsPointerOverGameObject())
         {
             _targetPosition = hit.point;
 
