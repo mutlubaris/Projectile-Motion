@@ -45,7 +45,7 @@ public class BallMotion : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        //If the ball is ready to launch and the cursor is on the Plane, we can try to calculate the path
+        //If the ball is ready to launch and the cursor is over the Plane but not the UI, we calculate the predicted path
         if (Physics.Raycast(ray, out hit, 1000f, _clickMask) && !_movementStarted && !EventSystem.current.IsPointerOverGameObject())
         {
             _targetPosition = hit.point;
@@ -104,26 +104,24 @@ public class BallMotion : MonoBehaviour
 
     void Visualize(Vector3 vo) //Updates the linerenderer according to the calculated positions
     {
-        _lineRenderer.positionCount = _lineSegment + 1;
+        _lineRenderer.positionCount = _lineSegment;
         
         for (int i = 0; i < _lineSegment; i++)
         {
-            Vector3 pos = CalculatePosition(vo, i / (float)_lineSegment);
+            Vector3 pos = CalculatePosition(vo, i / ((float)_lineSegment - 1));
             _lineRenderer.SetPosition(i, pos); 
         }
-
-        _lineRenderer.SetPosition(_lineSegment, _targetPosition);
     }
 
     void MoveBall()
     {
-        if (_checkpointIndex < _checkpoints.Length) //If we haven't reached the ground yet
+        if (_checkpointIndex < _checkpoints.Length) //If we haven't reached the ground yet, keep moving to the next path point
         {
             transform.position = Vector3.MoveTowards(transform.position, _checkpoints[_checkpointIndex], _speedMultiplier * Time.deltaTime * 5);
 
-            if (transform.position == _checkpoints[_checkpointIndex]) //Start moving to the next path point
+            if (transform.position == _checkpoints[_checkpointIndex]) 
             {
-                _checkpointIndex++;
+                _checkpointIndex++; //Increment the index to select the new path point
             }
         }
         else //When we reach the ground, we need to calculate the new path points according to the bounciness
@@ -139,7 +137,7 @@ public class BallMotion : MonoBehaviour
 
             _jumpMultiplier *= (_bounceMultiplier / 10);
 
-            if (_jumpMultiplier > _minimumJump) _checkpointIndex = 1; //Check if the next bounce is going to be high enough
+            if (_jumpMultiplier > _minimumJump) _checkpointIndex = 1; //Check if the next bounce is going to be high enough, bounce if it is
             else Destroy(gameObject); //Otherwise destroy the gameobject
         }
     }
